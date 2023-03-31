@@ -173,6 +173,9 @@ def getInscripcion(id):
     return jsonify(json)
 
 
+"Relacion uno a uno"
+
+
 @app.route("/inscripciones/estudiante/<string:id_estudiante>/materia/<string:id_materia>", methods=['POST'])
 def crearInscripcion(id_estudiante, id_materia):
     data = request.get_json()
@@ -192,6 +195,9 @@ def modificarInscripcion(id_inscripcion, id_estudiante, id_materia):
 def eliminarInscripciones(id):
     json = miControladorInscripcion.delete(id)
     return jsonify(json)
+
+
+"Relacion uno a Muchos"
 
 
 @app.route("/materia/<string:id>/departamento/<string:id_departamento>", methods=['PUT'])
