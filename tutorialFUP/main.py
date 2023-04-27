@@ -49,6 +49,7 @@ y tipos de peticiones a las cuales el servidor responderá CRUD.
 Estudiantes
 """
 
+
 @app.route("/estudiantes", methods=['GET'])
 def getEstudiantes():
     json = miControladorEstudiante.index()
@@ -117,6 +118,7 @@ def eliminarDepartamento(id):
     json = miControladorDepartamento.delete(id)
     return jsonify(json)
 
+
 """
 Materias
 """
@@ -153,20 +155,15 @@ def eliminarMateria(id):
     json = miControladorMateria.delete(id)
     return jsonify(json)
 
+
 """
 Inscripciones
 """
 
+
 @app.route("/inscripciones", methods=['GET'])
 def getInscripciones():
     json = miControladorInscripcion.index()
-    return jsonify(json)
-
-
-@app.route("/inscripciones", methods=['POST'])
-def crearInscripcion():
-    data = request.get_json()
-    json = miControladorInscripcion.create(data)
     return jsonify(json)
 
 
@@ -176,10 +173,21 @@ def getInscripcion(id):
     return jsonify(json)
 
 
-@app.route("/inscripciones/<string:id>", methods=['PUT'])
-def modificarInscripciones(id):
+"Relacion uno a uno"
+
+
+@app.route("/inscripciones/estudiante/<string:id_estudiante>/materia/<string:id_materia>", methods=['POST'])
+def crearInscripcion(id_estudiante, id_materia):
     data = request.get_json()
-    json = miControladorInscripcion.update(id, data)
+    json = miControladorInscripcion.create(data, id_estudiante, id_materia)
+    return jsonify(json)
+
+
+@app.route("/inscripciones/<string:id_inscripcion>/estudiante/<string:id_estudiante>/materia/<string:id_materia>",
+           methods=['PUT'])
+def modificarInscripcion(id_inscripcion, id_estudiante, id_materia):
+    data = request.get_json()
+    json = miControladorInscripcion.update(id_inscripcion, data, id_estudiante, id_materia)
     return jsonify(json)
 
 
@@ -188,6 +196,14 @@ def eliminarInscripciones(id):
     json = miControladorInscripcion.delete(id)
     return jsonify(json)
 
+
+"Relacion uno a Muchos"
+
+
+@app.route("/materia/<string:id>/departamento/<string:id_departamento>", methods=['PUT'])
+def asignarDepartamentoMateria(id, id_departamento):
+    json = miControladorMateria.asignarDepartamento(id, id_departamento)
+    return jsonify(json)
 
 
 """
